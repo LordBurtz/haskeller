@@ -7,8 +7,8 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.circe.CirceEntityCodec.*
 import org.http4s.headers.*
 import org.http4s.{MediaType, Charset}
-import com.example.restservice.models.Todo
-import com.example.restservice.services.TodoService
+import com.example.restservice.models.{Todo, TestCase, TestCaseResult}
+import com.example.restservice.services.{TodoService, TestCaseService}
 import org.http4s.EntityEncoder
 
 object TodoRoutes {
@@ -22,7 +22,7 @@ object TodoRoutes {
     }
   }
 
-  def routes[F[_]](todoService: TodoService[F])(using F: Concurrent[F]): HttpRoutes[F] = {
+  def routes[F[_]](todoService: TodoService[F], testCaseService: TestCaseService[F])(using F: Concurrent[F]): HttpRoutes[F] = {
     val dsl = new Http4sDsl[F] {}
     import dsl.*
 
@@ -61,6 +61,14 @@ object TodoRoutes {
         for {
           deleted <- todoService.deleteTodo(id)
           resp <- deleted.fold(NotFound())(Ok(_))
+        } yield resp
+        
+      // New route for test case submissions (Haskell code execution)
+      case req @ POST -> Root / "testcase" =>
+        for {
+          testCase <- req.as[TestCase]
+          processed <- testCaseService.processTestCase(testCase)
+          resp <- Ok(processed)
         } yield resp
     }
   }

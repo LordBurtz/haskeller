@@ -6,7 +6,7 @@ import org.http4s.*
 import org.http4s.implicits.*
 import org.http4s.circe.CirceEntityCodec.*
 import com.example.restservice.models.Todo
-import com.example.restservice.services.TodoService
+import com.example.restservice.services.{TodoService, TestCaseService}
 import com.example.restservice.routes.TodoRoutes
 
 class TodoRoutesSpec extends CatsEffectSuite {
@@ -47,7 +47,8 @@ class TodoRoutesSpec extends CatsEffectSuite {
       todosRef <- Ref.of[IO, Map[Long, Todo]](Map.empty)
       _ <- todosRef.update(_.updated(0L, Todo(Some(0), "Test Todo", false)))
       todoService = TodoService.inMemory[IO](idRef, todosRef)
-    } yield TodoRoutes.routes(todoService)
+      testCaseService = TestCaseService[IO]()
+    } yield TodoRoutes.routes(todoService, testCaseService)
     
     resource.flatMap(routes => test(routes)).unsafeRunSync()
   }

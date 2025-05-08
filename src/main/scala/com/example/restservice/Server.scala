@@ -6,7 +6,7 @@ import org.http4s.implicits.*
 import org.http4s.server.middleware.Logger
 import com.comcast.ip4s.*
 import com.example.restservice.models.Todo
-import com.example.restservice.services.TodoService
+import com.example.restservice.services.{TodoService, TestCaseService}
 import com.example.restservice.routes.TodoRoutes
 import org.http4s.StaticFile
 import org.http4s.dsl.io.NotFound
@@ -21,12 +21,13 @@ object Server extends IOApp {
       idRef <- Ref.of[IO, Long](0L)
       todosRef <- Ref.of[IO, Map[Long, Todo]](Map.empty)
       todoService = TodoService.inMemory[IO](idRef, todosRef)
+      testCaseService = TestCaseService[IO]()
       
       // Add some sample data
       _ <- todoService.createTodo(Todo(None, "Learn Scala 3", false))
       _ <- todoService.createTodo(Todo(None, "Build REST API", false))
       
-      httpApp = TodoRoutes.routes(todoService).orNotFound
+      httpApp = TodoRoutes.routes(todoService, testCaseService).orNotFound
       
       // Add logging middleware
       finalHttpApp = Logger.httpApp(true, true)(httpApp)

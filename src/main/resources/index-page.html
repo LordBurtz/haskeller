@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scala 3 REST Service</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #0074D9;
+        }
+        h2 {
+            color: #0074D9;
+            margin-top: 30px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .endpoint {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #0074D9;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0065c0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scala 3 REST Service</h1>
+    <p>Welcome to the Todo REST API built with Scala 3, Http4s, and Cats Effect.</p>
+    
+    <h2>API Endpoints</h2>
+    
+    <div class="endpoint">
+        <h3>List all todos</h3>
+        <code>GET /todos</code>
+        <div>
+            <button onclick="fetch('/todos').then(r => r.json()).then(data => alert(JSON.stringify(data, null, 2)))">
+                Try it
+            </button>
+        </div>
+    </div>
+    
+    <div class="endpoint">
+        <h3>Get a specific todo</h3>
+        <code>GET /todos/{id}</code>
+    </div>
+    
+    <div class="endpoint">
+        <h3>Create a new todo</h3>
+        <code>POST /todos</code>
+        <p>Example request body:</p>
+        <pre>{
+  "title": "Learn Scala",
+  "completed": false
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <h3>Update a todo</h3>
+        <code>PUT /todos/{id}</code>
+        <p>Example request body:</p>
+        <pre>{
+  "title": "Learn Scala 3",
+  "completed": true
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <h3>Delete a todo</h3>
+        <code>DELETE /todos/{id}</code>
+    </div>
+    
+    <footer>
+        <p><small>Powered by Scala 3, Http4s, and Cats Effect</small></p>
+    </footer>
+</body>
+</html> 
